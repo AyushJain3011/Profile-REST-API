@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     # created apps
-    'profiles_api',
+    'profile_api',
 
 ]
 
@@ -126,5 +126,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-AUTH_USER_MODLE = 'profiles_api.UserProfiles'
+ 
+AUTH_USER_MODEL = 'profile_api.UserProfile'

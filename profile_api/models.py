@@ -12,6 +12,7 @@ class UserProfileManager(BaseUserManager):
 
     if not email:
       raise ValueError ('User must have email address')
+
     
     email = self.normalize_email(email)
     user = self.model(email=email, name=name)
@@ -28,6 +29,7 @@ class UserProfileManager(BaseUserManager):
     """Create and save super user details"""
     user = self.create_user(email, name, password)
 
+    user.is_admin = True
     user.is_superuser = True
     user.is_staff = True
     user.save(using=self._db)
@@ -39,7 +41,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
   """Database model for user in the system"""
 
   email = models.EmailField(max_length=255, unique=True)
-  name = models.CharField(max_length=255)
+  name = models.CharField(max_length=255) 
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)
 
@@ -62,7 +64,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
       related_name="profiles_manager_perm", # Unique related name
       related_query_name="profiles_manager_perm",
   )
-
 
 
   # USER MODEL MANAGER CLASS
