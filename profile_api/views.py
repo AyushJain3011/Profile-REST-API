@@ -2,13 +2,15 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from . import serializers
 from rest_framework import viewsets
-from profile_api import models
 from rest_framework.authentication import TokenAuthentication
-from . import permission
 from rest_framework import filters
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
+from . import permission
+from . import serializers
+from profile_api import models
 
 class HelloApiView(APIView):
   """Testing rest api"""
@@ -139,6 +141,14 @@ class UserProfileViewSet(viewsets.ModelViewSet):
   permission_classes = (permission.UpdateOwnProfile,)
   filter_backends = (filters.SearchFilter,) 
   search_fields = ('name', 'email',)
+
+
+class UserLoginApiView(ObtainAuthToken):
+  """Handle Creating User authentication Login Tokens"""
+
+  # Enable the obtainAuthToken class to be render in Admin site so we are overridding"
+  renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
 
   
 

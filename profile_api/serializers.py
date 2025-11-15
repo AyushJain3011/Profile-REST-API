@@ -3,14 +3,14 @@ from rest_framework import serializers
 
 from . import models
 
-
+# for ApiViewset
 class HelloSerializer(serializers.Serializer):
   """Serializer a name filed for testing for our api view"""
 
   name = serializers.CharField(max_length=10)
 
 
-
+# for ViewSet
 class UserProfileSerializer(serializers.ModelSerializer):
   """Serializers user profile object"""
 
