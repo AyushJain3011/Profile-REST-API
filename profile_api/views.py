@@ -7,6 +7,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from . import permission
 from . import serializers
@@ -146,11 +147,30 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class UserLoginApiView(ObtainAuthToken):
   """Handle Creating User authentication Login Tokens"""
 
-  # Enable the obtainAuthToken class to be render in Admin site so we are overridding"
+  # overridding the setting file to Enable the obtainAuthToken class to be render in Admin site"
   renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
-  
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+  """Handle creating and updating Profile feeds"""
+
+  authentication_classes = (TokenAuthentication,)
+  serializer_class = serializers.ProfileFeedItemSerializer
+  queryset = models.ProfileFeedItem.objects.all()
+  permission_classes = (
+    permission.UpdateOwnStatus,
+    IsAuthenticatedOrReadOnly 
+    )
+
+
+  # Feature of DRF which allow you to override the creating object using ModelViewSet
+  def perform_create(self, serializer):
+    """Set the user profile to the logged in User"""
+
+    serializer.save(user_profile=self.request.user)
+
+
+
 
 
 

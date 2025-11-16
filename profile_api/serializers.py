@@ -16,7 +16,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = models.UserProfile
-
     # list of fields we are going to manage in our serializer and those will be accessible in our APi
     fields = ('id', 'email', 'name', 'password')
     extra_kwargs = {
@@ -32,6 +31,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
   def create(self, validated_data):
     """Create a new User """
 
+    # to encrypt user password
     user = models.UserProfile.objects.create_user(
       email=validated_data['email'],
       name=validated_data['name'],
@@ -49,8 +49,20 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
  
         return super().update(instance, validated_data)
+  
 
 
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+   """Searializes Profile Feed Items"""
+
+   class Meta:
+      model = models.ProfileFeedItem
+      fields = ('id', 'user_profile', 'status_text', 'created_on',)
+      extra_kwargs = {
+         'user_profile':{
+            'read_only': True
+         }
+      }
 
 
 
